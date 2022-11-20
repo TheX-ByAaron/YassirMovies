@@ -1,8 +1,10 @@
 package com.yassir.yassirmovies.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -15,7 +17,8 @@ fun MoviesScreen(navController: NavController
 
     Column(modifier = Modifier
         .statusBarsPadding()
-        .fillMaxSize()) {
+        .fillMaxSize()
+        .background(MaterialTheme.colors.background)) {
 
 
     }

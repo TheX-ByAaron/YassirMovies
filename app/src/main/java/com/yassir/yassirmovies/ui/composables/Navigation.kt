@@ -2,21 +2,21 @@ package com.yassir.yassirmovies.ui.composables
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.yassir.yassirmovies.ui.theme.navColor
 
 
 data class NavRoute(var icon: Int = 0,var Route:String)
@@ -31,27 +31,30 @@ fun BottomBar(navController: NavController, Routes : ArrayList<NavRoute>){
         Row(modifier = Modifier
             .padding(all = 8.dp)
             .fillMaxWidth()
-            .height(60.dp)
-            .background(
-                color = MaterialTheme.colors.surface, shape = MaterialTheme.shapes.medium
-            )
+            .height(72.dp)
+            .background(color = MaterialTheme.colors.surface,
+                shape = MaterialTheme.shapes.medium)
             .padding(top = 5.dp, bottom = 5.dp)
-
             , verticalAlignment = Alignment.CenterVertically
             , horizontalArrangement = Arrangement.SpaceEvenly) {
 
             Routes.forEachIndexed { _, route ->
-                Box(modifier = Modifier
-                    .clip(MaterialTheme.shapes.medium)
-                    .clickable {
+
+                BottomBarItem(modifier = Modifier
+                    .padding(horizontal = 8.dp, vertical = 2.dp)
+                    .fillMaxHeight()
+                    .weight(1f)
+                    , isSelected = isSelected.value?.destination?.route == route.Route
+                    , icon = route.icon
+                    , onNavigate = {
                         navController.navigate(route.Route) {
                             launchSingleTop = true
                             popUpTo("Home")
                             restoreState = true
                         }
-                    }){
-                    BottomBarItem(isSelected.value?.destination?.route == route.Route,route.icon)
-                }
+                    }
+                )
+
             }
 
         }
@@ -60,43 +63,41 @@ fun BottomBar(navController: NavController, Routes : ArrayList<NavRoute>){
 }
 
 @Composable
-fun BottomBarItem(isSelected: Boolean,
-                  icon: Int){
-    val selectedBarColor by animateColorAsState(targetValue = MaterialTheme.colors.primaryVariant)
-    val itemSelectedColor by animateColorAsState(targetValue = MaterialTheme.colors.surface)
+fun BottomBarItem(modifier :Modifier = Modifier
+                  , isSelected: Boolean
+                  , icon: Int
+                  , onNavigate : ()-> Unit = {}){
 
-    Column(modifier= Modifier
-        .requiredWidth(50.dp)
-        .height(50.dp)
+    val selectedBarColor by animateColorAsState(targetValue = MaterialTheme.colors.primary)
+    val itemSelectedColor by animateColorAsState(targetValue = MaterialTheme.colors.navColor)
+
+    Column(modifier= modifier
         .background(
             if (isSelected) itemSelectedColor else MaterialTheme.colors.surface,
-            shape = MaterialTheme.shapes.small
-        )
-        , horizontalAlignment = Alignment.CenterHorizontally
-        , verticalArrangement = if(isSelected) Arrangement.SpaceBetween else Arrangement.Center){
+            shape = MaterialTheme.shapes.medium)
+        .clip(shape = MaterialTheme.shapes.medium)
+        .clickable {
+            onNavigate()
+        }
 
-        Image(modifier = Modifier
-            .padding(all = 8.dp)
+        , horizontalAlignment = Alignment.CenterHorizontally
+        , verticalArrangement = Arrangement.Center){
+
+        Icon(modifier = Modifier
+            .padding(all = 0.dp)
             .size(30.dp)
             , painter = painterResource(id = icon)
             , contentDescription = "Bottom bar item"
-            , colorFilter = ColorFilter.tint(if(isSelected) selectedBarColor else MaterialTheme.colors.primary))
+            , tint = if(isSelected) selectedBarColor else MaterialTheme.colors.onSurface)
 
         AnimatedVisibility(visible = isSelected) {
             Surface(modifier = Modifier
+                .padding(top = 6.dp)
                 .height(5.dp)
-                .width(35.dp)
+                .width(5.dp)
                 ,color = selectedBarColor
                 , shape = MaterialTheme.shapes.medium){}
         }
 
-    }
-}
-
-
-fun NavController.navigateTo(route: String){
-    this.navigate(route){
-        launchSingleTop = true
-        restoreState = true
     }
 }
