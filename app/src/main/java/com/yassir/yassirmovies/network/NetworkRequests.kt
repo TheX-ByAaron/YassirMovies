@@ -1,5 +1,6 @@
 package com.yassir.yassirmovies.network
 
+import com.yassir.yassirmovies.models.MovieResult
 import com.yassir.yassirmovies.models.ShowResult
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -12,6 +13,23 @@ suspend fun getShows() : ShowResult? {
             protocol =  URLProtocol.HTTPS
             host = Client.baseUrl
             path("/discover/tv")
+            parameters.append("api_key", Client.apiKey)
+        }
+    }
+
+    return if(response.status == HttpStatusCode.OK){
+        response.body()
+    }else{
+        null
+    }
+}
+
+suspend fun getMovies() : MovieResult? {
+    val response = Client.instance().get {
+        url {
+            protocol =  URLProtocol.HTTPS
+            host = Client.baseUrl
+            path("/discover/movie")
             parameters.append("api_key", Client.apiKey)
         }
     }

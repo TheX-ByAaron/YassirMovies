@@ -3,10 +3,12 @@ package com.yassir.yassirmovies.ui.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -33,6 +35,9 @@ fun MoviesScreen(navController: NavController
         )
     )
 
+    mainViewModel.getMovies()
+    val movies = mainViewModel.movieList.observeAsState()
+
     Column(modifier = Modifier
         .fillMaxSize()
         .background(background)
@@ -46,12 +51,16 @@ fun MoviesScreen(navController: NavController
 
         LazyColumn(modifier = Modifier.fillMaxSize()){
 
-            items(15){
-                MovieCard()
+            if(movies.value != null){
+                items(movies.value?.toList()!!){ movie ->
+                    MovieCard(movie)
+                }
             }
 
             item {
-                Surface(modifier = Modifier.fillMaxWidth().height(120.dp)
+                Surface(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp)
                     , color = MaterialTheme.colors.background) {}
             }
         }

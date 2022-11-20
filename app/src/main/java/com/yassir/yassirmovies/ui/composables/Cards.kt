@@ -18,23 +18,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.yassir.yassirmovies.R
+import com.yassir.yassirmovies.models.Movie
 import com.yassir.yassirmovies.models.Show
 import com.yassir.yassirmovies.network.Client
 
 
 @Composable
-fun MovieCard(){
+fun MovieCard(movie: Movie){
 
     Row(modifier = Modifier
         .padding(horizontal = 16.dp, vertical = 8.dp)
         .fillMaxWidth()
-        .height(200.dp)
+        .height(250.dp)
         .background(
             color = MaterialTheme.colors.surface,
             shape = MaterialTheme.shapes.medium
         )) {
 
-        AsyncImage(model = R.drawable.cover
+        AsyncImage(model = "${Client.baseImageUrl}${movie.posterPath}"
             , contentDescription = "Cover image"
             , contentScale = ContentScale.Crop
             , alignment = Alignment.Center
@@ -49,7 +50,7 @@ fun MovieCard(){
             .fillMaxHeight()
             .weight(1.1f)) {
 
-            Text(text = "The shawshank redemption"
+            Text(text = movie.title
                 , fontWeight = FontWeight.Bold
                 , fontSize = 20.sp
                 , maxLines = 2
@@ -59,7 +60,7 @@ fun MovieCard(){
                     .fillMaxWidth()
                     .wrapContentHeight())
 
-            Text(text = "Aired: 1992"
+            Text(text = "Released: ${movie.releaseDate.substring(0, 4)}"
                 , fontWeight = FontWeight.Medium
                 , fontSize = 16.sp
                 , modifier = Modifier
@@ -81,7 +82,7 @@ fun MovieCard(){
                     , tint = Color.White
                     , modifier = Modifier.size(25.dp))
 
-                Text(text = "8.9"
+                Text(text = movie.voteAverage.toString()
                     , fontWeight = FontWeight.Medium
                     , fontSize = 14.sp
                     , color = Color.White
@@ -102,7 +103,7 @@ fun ShowCard(show: Show){
     Row(modifier = Modifier
         .padding(horizontal = 16.dp, vertical = 8.dp)
         .fillMaxWidth()
-        .height(200.dp)
+        .height(250.dp)
         .background(
             color = MaterialTheme.colors.surface,
             shape = MaterialTheme.shapes.medium
