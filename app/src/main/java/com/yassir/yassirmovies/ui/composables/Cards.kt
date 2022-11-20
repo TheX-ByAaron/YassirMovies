@@ -1,6 +1,7 @@
 package com.yassir.yassirmovies.ui.composables
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -24,7 +25,7 @@ import com.yassir.yassirmovies.network.Client
 
 
 @Composable
-fun MovieCard(movie: Movie){
+fun MovieCard(movie: Movie, onClick: ()-> Unit){
 
     Row(modifier = Modifier
         .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -33,7 +34,10 @@ fun MovieCard(movie: Movie){
         .background(
             color = MaterialTheme.colors.surface,
             shape = MaterialTheme.shapes.medium
-        )) {
+        ).clip(MaterialTheme.shapes.medium)
+        .clickable {
+            onClick()
+        }) {
 
         AsyncImage(model = "${Client.baseImageUrl}${movie.posterPath}"
             , contentDescription = "Cover image"
@@ -98,7 +102,7 @@ fun MovieCard(movie: Movie){
 
 
 @Composable
-fun ShowCard(show: Show){
+fun ShowCard(show: Show, onClick: ()-> Unit){
 
     Row(modifier = Modifier
         .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -107,7 +111,10 @@ fun ShowCard(show: Show){
         .background(
             color = MaterialTheme.colors.surface,
             shape = MaterialTheme.shapes.medium
-        )) {
+        ).clip(MaterialTheme.shapes.medium)
+        .clickable {
+            onClick()
+        }) {
 
         AsyncImage(model = "${Client.baseImageUrl}${show.posterPath}"
             , contentDescription = "Cover image"

@@ -11,10 +11,11 @@ import com.yassir.yassirmovies.viewmodels.MainViewModel
 
 
 @Composable
-fun TvShowDetailsScreen(navController: NavController,
+fun TvShowDetailsScreen(showId: String,
+                        navController: NavController,
                         mainViewModel: MainViewModel = viewModel()){
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Text(text = "movies")
+        Text(text = "shows")
     }
 }

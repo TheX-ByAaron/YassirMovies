@@ -60,7 +60,9 @@ fun ShowsScreen(navController: NavController
 
             if(shows.value != null){
                 items(shows.value?.toList()!!){ show ->
-                    ShowCard(show)
+                    ShowCard(show){
+                        navController.navigate("TvShowDetails/${show.id}")
+                    }
                 }
             }
 

@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -39,16 +40,30 @@ class MainActivity : ComponentActivity() {
                     .navigationBarsPadding(),
                     color = MaterialTheme.colors.background) {
                     Scaffold(
-                        topBar = {},
-                        content = {
-                            NavHost(navController = navController, startDestination = "OnBoarding"){
+                        content = { paddingValues ->
+                            NavHost(modifier = Modifier.padding(paddingValues)
+                                , navController = navController
+                                , startDestination = "OnBoarding"){
+
                                 composable("OnBoarding"){ OnBoardingScreen(navController = navController) }
-                                composable("MovieDetails"){ MovieDetailsScreen(navController = navController)}
-                                composable("TvShowDetails"){ TvShowDetailsScreen(navController = navController)}
                                 navigation(startDestination = "movies", route = "Home" ){
                                     composable("movies"){ MoviesScreen(navController = navController) }
                                     composable("shows"){ ShowsScreen(navController = navController) }
                                 }
+                                composable("MovieDetails/{movieId}"){ backStackEntry ->
+
+                                    MovieDetailsScreen(navController = navController,
+                                        movieId = backStackEntry.arguments?.getString("movieId")!!)
+
+                                }
+
+                                composable("TvShowDetails/{showId}"){ backStackEntry ->
+
+                                    TvShowDetailsScreen(navController = navController,
+                                        showId = backStackEntry.arguments?.getString("showId")!!)
+
+                                }
+
                             }
                         },
                         bottomBar = {

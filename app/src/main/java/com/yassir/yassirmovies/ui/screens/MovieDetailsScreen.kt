@@ -10,7 +10,8 @@ import androidx.navigation.NavController
 import com.yassir.yassirmovies.viewmodels.MainViewModel
 
 @Composable
-fun MovieDetailsScreen(navController: NavController,
+fun MovieDetailsScreen(movieId: String,
+                       navController: NavController,
                        mainViewModel: MainViewModel = viewModel()){
 
     Column(modifier = Modifier.fillMaxSize()) {

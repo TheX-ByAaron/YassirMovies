@@ -53,7 +53,9 @@ fun MoviesScreen(navController: NavController
 
             if(movies.value != null){
                 items(movies.value?.toList()!!){ movie ->
-                    MovieCard(movie)
+                    MovieCard(movie){
+                        navController.navigate("MovieDetails/${movie.id}")
+                    }
                 }
             }
 
@@ -61,7 +63,7 @@ fun MoviesScreen(navController: NavController
                 Surface(modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp)
-                    , color = MaterialTheme.colors.background) {}
+                    , color = Color.Transparent) {}
             }
         }
     }
