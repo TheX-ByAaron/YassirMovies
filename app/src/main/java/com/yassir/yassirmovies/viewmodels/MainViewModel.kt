@@ -14,6 +14,7 @@ class MainViewModel: ViewModel() {
     val showList : MutableLiveData<ArrayList<Show>> = MutableLiveData()
     val movieList : MutableLiveData<ArrayList<Movie>> = MutableLiveData()
 
+    val currentMovieDetails: MutableLiveData<Movie?> = MutableLiveData()
 
     fun getShows(){
         viewModelScope.launch {
@@ -43,5 +44,22 @@ class MainViewModel: ViewModel() {
                 movieList.value = arrayListOf()
             }
         }
+    }
+
+    fun getMovieDetails(id: String){
+
+        viewModelScope.launch {
+            try {
+                val result = MainRepository.getMovieDetailsAsync(id).await()
+                if(result != null){
+                    currentMovieDetails.value = result
+                }else{
+                    currentMovieDetails.value = null
+                }
+            }catch (_ : Exception){
+                currentMovieDetails.value = null
+            }
+        }
+
     }
 }

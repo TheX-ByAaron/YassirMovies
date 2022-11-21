@@ -14,10 +14,10 @@ val Colors.navColor : Color
     get() = Color(0x1400C70E)
 
 val Colors.background_100 : Color
-    get() =  Black
+    get() =  if(isLight) Green200 else Black
 
 val Colors.background_50 : Color
-    get() =  Color(0xED000000)
+    get() =  if(isLight) Color(0xEDE0FFE2) else Color(0xED000000)
 
 val Colors.background_80 : Color
-    get() = Color(0xF3000000)
+    get() = if(isLight) Color(0xF3E0FFE2) else Color(0xF3000000)

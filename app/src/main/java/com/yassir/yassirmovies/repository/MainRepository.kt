@@ -1,7 +1,9 @@
 package com.yassir.yassirmovies.repository
 
+import com.yassir.yassirmovies.models.Movie
 import com.yassir.yassirmovies.models.MovieResult
 import com.yassir.yassirmovies.models.ShowResult
+import com.yassir.yassirmovies.network.getMovieById
 import com.yassir.yassirmovies.network.getMovies
 import com.yassir.yassirmovies.network.getShows
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +29,14 @@ object MainRepository {
 
         return deferred
 
+    }
+
+    suspend fun getMovieDetailsAsync(id: String): Deferred<Movie?> {
+        val deferred: Deferred<Movie?> = CoroutineScope(Dispatchers.IO).async {
+            return@async getMovieById(id)
+        }
+
+        return deferred
     }
 
 }
