@@ -17,9 +17,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.yassir.yassirmovies.R
 import com.yassir.yassirmovies.ui.composables.TextButton
-import com.yassir.yassirmovies.ui.theme.background_100
-import com.yassir.yassirmovies.ui.theme.background_50
-import com.yassir.yassirmovies.ui.theme.background_80
+import com.yassir.yassirmovies.ui.theme.Black
 
 
 
@@ -30,9 +28,9 @@ fun OnBoardingScreen(navController: NavController){
     val background = Brush.verticalGradient(
         listOf(
             Color.Transparent,
-            MaterialTheme.colors.background_50,
-            MaterialTheme.colors.background_80,
-            MaterialTheme.colors.background_100,
+            Color(0xED000000),
+            Color(0xF3000000),
+            Black,
 
         )
     )
