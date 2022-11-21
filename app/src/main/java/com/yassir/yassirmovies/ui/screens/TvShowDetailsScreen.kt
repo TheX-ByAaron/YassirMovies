@@ -2,11 +2,14 @@ package com.yassir.yassirmovies.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,9 +26,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.yassir.yassirmovies.R
+import com.yassir.yassirmovies.network.Client
 import com.yassir.yassirmovies.ui.theme.background_100
-import com.yassir.yassirmovies.ui.theme.background_50
-import com.yassir.yassirmovies.ui.theme.background_80
 import com.yassir.yassirmovies.viewmodels.MainViewModel
 
 
@@ -37,22 +39,25 @@ fun TvShowDetailsScreen(showId: String,
     val background = Brush.verticalGradient(
         listOf(
             Color.Transparent,
-            MaterialTheme.colors.background_50,
-            MaterialTheme.colors.background_80,
-            MaterialTheme.colors.background_80,
+            MaterialTheme.colors.background_100,
+            MaterialTheme.colors.background_100,
+            MaterialTheme.colors.background_100,
             MaterialTheme.colors.background_100)
     )
+
+    mainViewModel.getShowDetails(showId)
+    val show = mainViewModel.currentShowDetails.observeAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
 
         Column(modifier = Modifier.fillMaxSize()) {
-            AsyncImage(model = R.drawable.cover
+            AsyncImage(model = "${Client.baseImageUrl}${show.value?.backDropPath}"
                 , contentDescription = "Cover image"
                 , contentScale = ContentScale.Crop
                 , alignment = Alignment.Center
                 , modifier = Modifier
                     .fillMaxWidth()
-                    .height(270.dp))
+                    .height(300.dp))
 
             Surface(modifier = Modifier
                 .fillMaxWidth()
@@ -63,21 +68,22 @@ fun TvShowDetailsScreen(showId: String,
         Column(modifier = Modifier
             .systemBarsPadding()
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .background(brush = background)
             , horizontalAlignment = Alignment.CenterHorizontally) {
 
-            AsyncImage(model = R.drawable.cover
+            AsyncImage(model = "${Client.baseImageUrl}${show.value?.posterPath}"
                 , contentDescription = "poster image"
                 , contentScale = ContentScale.Crop
                 , alignment = Alignment.Center
                 , modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 42.dp)
+                    .padding(top = 65.dp, bottom = 24.dp)
                     .height(300.dp)
                     .width(200.dp)
                     .clip(MaterialTheme.shapes.medium)
                     .shadow(10.dp))
 
-            Text(text = "The shawnsShank redemption"
+            Text(text = show.value?.name?: "..."
                 , textAlign = TextAlign.Center
                 , fontWeight = FontWeight.Bold
                 , fontSize = 28.sp
@@ -86,7 +92,7 @@ fun TvShowDetailsScreen(showId: String,
                     .fillMaxWidth()
                     .wrapContentHeight())
 
-            Text(text = "1994"
+            Text(text = show.value?.airDate?: "..."
                 , textAlign = TextAlign.Center
                 , fontWeight = FontWeight.SemiBold
                 , color = MaterialTheme.colors.primary
@@ -99,8 +105,10 @@ fun TvShowDetailsScreen(showId: String,
             Row(modifier = Modifier
                 .padding(horizontal = 0.dp, vertical = 8.dp)
                 .wrapContentSize()
-                .background(color = MaterialTheme.colors.primary,
-                    shape = MaterialTheme.shapes.small)
+                .background(
+                    color = MaterialTheme.colors.primary,
+                    shape = MaterialTheme.shapes.small
+                )
                 .padding(horizontal = 4.dp, vertical = 8.dp)
                 , verticalAlignment = Alignment.CenterVertically
                 , horizontalArrangement = Arrangement.Center) {
@@ -110,7 +118,7 @@ fun TvShowDetailsScreen(showId: String,
                     , tint = Color.White
                     , modifier = Modifier.size(25.dp))
 
-                Text(text = "10"
+                Text(text = show.value?.voteAverage?.toString()?: "..."
                     , fontWeight = FontWeight.Medium
                     , fontSize = 14.sp
                     , color = Color.White
@@ -119,7 +127,7 @@ fun TvShowDetailsScreen(showId: String,
                         .wrapContentSize())
             }
 
-            Text(text = "A text goes here, this is a long text to represent the description of the movie that will be instated here after a request from the client to the server"
+            Text(text = show.value?.overview?: "..."
                 , textAlign = TextAlign.Justify
                 , fontWeight = FontWeight.Normal
                 , fontSize = 18.sp

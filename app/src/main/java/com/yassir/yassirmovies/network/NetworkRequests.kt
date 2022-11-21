@@ -2,6 +2,7 @@ package com.yassir.yassirmovies.network
 
 import com.yassir.yassirmovies.models.Movie
 import com.yassir.yassirmovies.models.MovieResult
+import com.yassir.yassirmovies.models.Show
 import com.yassir.yassirmovies.models.ShowResult
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -48,6 +49,23 @@ suspend fun getMovieById(id: String): Movie? {
             protocol =  URLProtocol.HTTPS
             host = Client.baseUrl
             path("/movie/${id}")
+            parameters.append("api_key", Client.apiKey)
+        }
+    }
+
+    return if(response.status == HttpStatusCode.OK){
+        response.body()
+    }else{
+        null
+    }
+}
+
+suspend fun getShowById(id: String): Show? {
+    val response = Client.instance().get {
+        url {
+            protocol =  URLProtocol.HTTPS
+            host = Client.baseUrl
+            path("/tv/${id}")
             parameters.append("api_key", Client.apiKey)
         }
     }
